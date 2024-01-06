@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "_CustomLayout";
+}
+@model UpdateEmployeeViewModel
+<partial name="~/Views/Shared/_Notification.cshtml" />
+
+<div class="container">
+    <div class="d-flex flex-column">
+        <div class="col-md-4 mt-2 d-flex justify-content-between" style="background: #1ccad8;">
+            <span class="fw-bold mx-3 fs-5 p-1">Update Employee</span>
+            <a asp-area="" asp-controller="Employee" asp-action="Employees">
+                <ion-icon name="arrow-back-outline" class="fs-4 p-2 text-dark"></ion-icon>
+            </a>
+        </div>
+        <form method="post" action="UpdateEmployee">
+            <div class="col-md-4 mt-2">
+                <div class="form-floating mb-3">
+                    @Html.TextBoxFor(x => x.Id, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.LabelFor(x => x.Id)
+                </div> <div class="form-floating mb-3">
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Employee Name"})
+                    @Html.LabelFor(x => x.Name)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Address, new { @class = "form-control", placeholder = "Address"})
+                    @Html.LabelFor(x => x.Address)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Salary, new { @class = "form-control", placeholder = "Salary"})
+                    @Html.LabelFor(x => x.Salary)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Phone, new { @class = "form-control", placeholder = "Contact Number" , @readonly = "readonly" })
+                    @Html.LabelFor(x => x.Phone)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Position, new { @class = "form-control", placeholder = "eg. Manager" })
+                    @Html.LabelFor(x => x.Position)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Email", type = "email", @readonly = "readonly" })
+                    @Html.LabelFor(x => x.Email)
+                </div>
+                <div class="form-floating mb-2">
+                    @Html.TextBoxFor(x => x.Department, new { @class = "form-control", placeholder = "Department" })
+                    @Html.LabelFor(x => x.Department)
+                </div>
+                <div class="form-control">
+                    <input type="submit" class="btn btn-primary" value="Update Employee">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
