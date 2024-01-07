@@ -35,7 +35,7 @@ namespace EmployeeMgmtSystem.Controllers
             ViewBag.Pager = pager;
             return View(data);
         }
-        public IActionResult AddEmployee()
+        public IActionResult AddEmployee(int Id)
         {
             return View();
         }
