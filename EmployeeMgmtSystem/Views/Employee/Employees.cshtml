@@ -29,6 +29,7 @@
         <div class="col col-md-10">
             @if (Model != null)
             {
+
                 <table class="table">
                     <thead>
                         <tr>
@@ -63,7 +64,7 @@
                                     <a href="/Employee/UpdateEmployee/@data.Id" class="bg-success mx-1 rounded text-center" style="cursor:pointer;">
                                         <ion-icon name="create-outline" class="text-white fs-4 mx-1"></ion-icon>
                                     </a>
-                                    <a href="/Employee/UpdateEmployee/@data.Id" class="bg-primary mx-1 rounded text-center">
+                                    <a href="/Employee/ViewEmployee/@data.Id" class="bg-primary mx-1 rounded text-center">
                                         <ion-icon name="eye-outline" class="text-white fs-4 mx-1"></ion-icon>
                                     </a>
                                 </td>
@@ -73,8 +74,8 @@
 
                     </tbody>
                 </table>
+                <partial name="~/Views/Shared/_Pagination.cshtml" model="@pager" />
 
-                <partial name="~/Views/Shared/_Pagination.cshtml" model = "@pager"/>
             }
             else
             {
