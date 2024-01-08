@@ -14,18 +14,40 @@
 <partial name="~/Views/Shared/_Notification.cshtml" />
 
 @model IEnumerable<EmployeeMgmtSystem.Models.Domain.EmployeeModel>
+
 <div class="container">
     <div class="d-flex flex-column">
         <div class="col-md-10 mb-3">
             <div  style="background: #43aa8b;">
                 <span class="d-flex justify-content-between p-2">
-                    <span class="text-white mx-2 fw-bold">Employees Dashboard</span>
+                    <a class="text-white mx-2 fw-bold" aria-current="page" asp-area="" asp-controller="Employee" asp-action="Employees" style="text-decoration:none;">Dashboard</a>
                     <a asp-area="" asp-controller="Employee" asp-action="AddEmployee" >
                         <ion-icon name="person-add-outline" class="fs-4 text-white mx-3 pe-auto"></ion-icon>
                     </a>
                 </span>
             </div>
         </div>
+            <div class="col-md-10 d-flex flex-row justify-content-between">
+                <div class="input-group mb-3">
+                    <span id="errorSpan"></span>
+                    <form class="d-flex flex-row" action="@Url.Action("Employees","Employee")">
+                        <input type="text" name="searchQuery" id="searchQuery" class="form-control" placeholder="Search....">
+                        <button onclick="preventReload()" class="outline-none" style="border:none;background:#43aa8b;border-top-right-radius:5px;color:white;">
+                            <ion-icon name="search-outline" class="mx-1 fs-5 border-1 border-dark "></ion-icon>
+                        </button>
+                    </form>
+                </div>
+                 <div class="">
+                     <form method="get" id="filterForm" >
+                        <select id="selectSortType" name="sortType" class="form-select form-select-lg mb-3" aria-label="Sort">
+                            <option value ="0">Filter &nbsp;&nbsp;&nbsp;</option>
+                            <option value="1">Ascending</option>
+                            <option value="2">Descending</option>
+                        </select>
+                     </form>
+                </div>
+               
+            </div>
         <div class="col col-md-10">
             @if (Model != null)
             {
@@ -89,6 +111,19 @@
 
 
 <script>
+    var selectSortType = document.getElementById('selectSortType')
+    var filterForm = document.getElementById('filterForm')
+    selectSortType.addEventListener('change', function () {
+        var selectedValue = selectSortType.value
+        if (selectedValue !== '0' && selectedValue <3) {
+            setTimeout(function () {
+                var xhr = new XMLHttpRequest()
+                xhr.open("GET","/Employee/Employees?sortId="+selectedValue,true)
+                filterForm.submit()
+            }, 3000);
+        }
+    })
+
     function confirmDelete( employeeId ){
         var confirmation = confirm("Are you sure you want to delete this data?")
         if (confirmation) {
@@ -96,5 +131,16 @@
         } else {
             
         }
+    }
+
+    function preventReload(){
+
+        var searchQuery = document.getElementById('searchQuery').value
+        var errorMessageSpan = document.getElementById('errorSpan')
+        if (searchQuery === '') {
+            errorMessageSpan.innerHTML = "<small style='color:red;font-size:10px;'>Empty query..</small>"
+            event.preventDefault()
+        }
+       
     }
 </script>
