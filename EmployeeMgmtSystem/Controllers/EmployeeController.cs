@@ -2,6 +2,8 @@
 using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Numerics;
 using System.Xml.Linq;
@@ -20,22 +22,60 @@ namespace EmployeeMgmtSystem.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult Employees(int pg = 1) {
-            List<EmployeeModel> employeeData = _employeeDbContext.Employees?.OrderBy(e=>e.Name).ToList();
+        public IActionResult Employees(int pg = 1,string searchQuery = "",int sortType = 1) {
             const int pageSize = 5;
             if (pg < 1)
             {
                 pg = 1;
             }
 
-            int resCount = employeeData.Count();
-            var pager = new Pager(resCount, pg, pageSize);
-            int resSkip = (pg - 1) * pageSize;
-            var data = employeeData.Skip(resSkip).Take(pager.PageSize).ToList();
-            ViewBag.Pager = pager;
-            return View(data);
+            if(sortType == 1)
+            {
+                List<EmployeeModel>? employeeData = _employeeDbContext.Employees?.OrderBy(e => e.Name).ToList();
+                return View(employeeData);
+            }
+            else if(sortType == 2)
+            {
+                 List<EmployeeModel>? employeeData = _employeeDbContext.Employees?.OrderByDescending(e => e.Name).ToList();
+                return View(employeeData);
+
+            }
+            if (String.IsNullOrEmpty(searchQuery))
+            {
+
+                List<EmployeeModel> employeeData = _employeeDbContext.Employees?.ToList();
+
+                int resCount = employeeData.Count();
+                var pager = new Pager(resCount, pg, pageSize);
+                int resSkip = (pg - 1) * pageSize;
+                var data = employeeData.Skip(resSkip).Take(pager.PageSize).ToList();
+                ViewBag.Pager = pager;
+                return View(data);
+            }
+            else
+            {
+                var searchResult = _employeeDbContext.Employees.Where(e =>
+                           e.Name.Contains(searchQuery) ||
+                           e.Email.Contains(searchQuery) ||
+                           e.Department.Contains(searchQuery)
+                           ).ToList();
+                int resultCount = searchResult.Count;
+
+                if(resultCount == 0)
+                {
+                    TempData["ErrorMessage"] = "Opps! No data found !";
+                    return RedirectToAction("Employees");
+                }
+                var pager = new Pager(resultCount, pg, pageSize);
+                var resSkip = (pg-1)* pageSize;
+                var data = searchResult.Skip(resSkip).Take(pager.PageSize).ToList();
+                ViewBag.Pager = pager;
+                return View(data);
+                
+
+            }
         }
-        public IActionResult AddEmployee(int Id)
+        public IActionResult AddEmployee()
         {
             return View();
         }
@@ -139,9 +179,10 @@ namespace EmployeeMgmtSystem.Controllers
             }
         }
 
-        public IActionResult ViewEmployee(int id)
+        public IActionResult ViewEmployee(int Id)
         {
-            return View();
+            var employee = _employeeDbContext.Employees?.Find(Id);
+            return View(employee);
         }
     }
 }
