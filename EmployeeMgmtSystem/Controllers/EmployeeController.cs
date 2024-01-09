@@ -30,14 +30,15 @@ namespace EmployeeMgmtSystem.Controllers
             {
                 pg = 1;
             }           
-            if (String.IsNullOrEmpty(searchQuery) || sortType == 0)
+            if (String.IsNullOrEmpty(searchQuery) || sortType == 1)
             { 
-                var result = Paginate(5,pg,searchQuery="");
+                var result = Paginate(5,pg,searchQuery,sortType);
                 return View(result);
             }
             else
             {
-                var searchResult = Paginate(5, pg, searchQuery);
+                
+                var searchResult = Paginate(5, pg, searchQuery,1);
                 return View(searchResult);
             }
         }
@@ -50,12 +51,13 @@ namespace EmployeeMgmtSystem.Controllers
         {
             try
             {
-                string filename = "";
+                string filename = "default.png";
                 if(employeeVm.Image !=  null)
                 {
                     string uploadFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
                     filename = Guid.NewGuid().ToString()+employeeVm.Image.FileName;
                     string filePath = Path.Combine(uploadFolder,filename);
+
                     employeeVm.Image.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
                 if(_employeeDbContext.Employees.Any(e=>e.Email == employeeVm.Email || e.Phone == employeeVm.Phone)) {
@@ -117,6 +119,17 @@ namespace EmployeeMgmtSystem.Controllers
             var employee = _employeeDbContext.Employees?.Find(updateEmployeeVM.Id);
             if(employee != null)
             {
+                string filename = "";
+                if(updateEmployeeVM.Image != null)
+                {
+                    string uploadFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
+                    filename = Guid.NewGuid().ToString() + updateEmployeeVM.Image.FileName;
+                    string filePath = Path.Combine(uploadFolder, filename);
+                    updateEmployeeVM.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+                    employee.Image = filename;
+
+                }
+               
                 //check if email or phone is already exists or not.
                
                     employee.Name = updateEmployeeVM.Name;
@@ -126,6 +139,7 @@ namespace EmployeeMgmtSystem.Controllers
                     employee.Position = updateEmployeeVM.Position;
                     employee.Email = updateEmployeeVM.Email;
                     employee.Department = updateEmployeeVM.Department;
+
                     _employeeDbContext.SaveChanges();
                     TempData["SuccessMessage"] = "Data Updated Successfully.";
                     return RedirectToAction("Employees");   
@@ -160,8 +174,9 @@ namespace EmployeeMgmtSystem.Controllers
             return View(employee);
         }
 
-        public List<EmployeeModel> Paginate(int pagesize, int pg = 1,string searchquery = "")
+        public List<EmployeeModel> Paginate(int pagesize, int pg = 1,string searchquery = "",int sorttype = 0)
         {
+            int sortType = sorttype;
             string searchQuery = searchquery;
             int pageSize = 5;
             List<EmployeeModel> employeeData;
@@ -180,7 +195,15 @@ namespace EmployeeMgmtSystem.Controllers
             }
             else
             {
-             employeeData = _employeeDbContext.Employees?.ToList();
+                
+                if(sortType == 2)
+                {
+                    employeeData = _employeeDbContext.Employees?.OrderByDescending(x=>x.Name).ToList();
+                }
+                else
+                {
+                    employeeData = _employeeDbContext.Employees?.OrderBy(x=>x.Name).ToList();                
+                }
             }
 
             int resultCount = employeeData.Count();
@@ -190,5 +213,6 @@ namespace EmployeeMgmtSystem.Controllers
             ViewBag.pager = pager;
             return data;
         }
+       
     }
 }
