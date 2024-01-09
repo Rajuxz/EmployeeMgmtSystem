@@ -11,7 +11,7 @@
             <ion-icon name="arrow-back-outline" class="fs-4 p-2 text-dark"></ion-icon>
         </a>
     </div>
-    <form method="post" action="AddEmployee">
+    <form method="post" action="AddEmployee" enctype="multipart/form-data">
     <div class="col-md-4 mt-2">
         <div class="form-floating mb-3">
             @Html.TextBoxFor(x=>x.Name,new{@class = "form-control",placeholder="Employee Name",required="required"})
@@ -40,6 +40,10 @@
         <div class="form-floating mb-2">
             @Html.TextBoxFor(x=>x.Department,new{@class = "form-control",placeholder="Department",required="required"})
             @Html.LabelFor(x=>x.Department)
+        </div> 
+        <div class="form-floating mb-2">
+            <input type="file" class="form-control" placeholder="Image" asp-for="Image" required/>
+            @Html.LabelFor(x=>x.Image)
         </div>
         <div class="form-control">
             <input type="submit" class="btn btn-primary" value="Add Employee">
