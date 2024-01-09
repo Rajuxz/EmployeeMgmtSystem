@@ -45,6 +45,10 @@
                     @Html.TextBoxFor(x => x.Department, new { @class = "form-control", placeholder = "Department" })
                     @Html.LabelFor(x => x.Department)
                 </div>
+                <div class="form-floating mb-2">
+                    <input type="file" class="form-control" asp-for="Image" placeholder="Upload Files"/>
+                </div>
+
                 <div class="form-control">
                     <input type="submit" class="btn btn-primary" value="Update Employee">
                 </div>
