@@ -1,13 +1,16 @@
 ﻿@{
     ViewData["Title"] = "View Employees";
-    int counter = 1;
+    int counter = 1; //Initialize the counter.
     Pager pager = new Pager();
-    int pageNumber = 0;
+    int pageNumber = 0; //Default page number is 0.
+    int copyCounter = counter;
     if(ViewBag.Pager != null)
     {
         pager = ViewBag.Pager;
         pageNumber = pager.CurrentPage;
     }
+    //Track the page number
+     
 
 }
 
@@ -21,7 +24,9 @@
             <div  style="background: #43aa8b;">
                 <span class="d-flex justify-content-between p-2">
                     <a class="text-white mx-2 fw-bold" aria-current="page" asp-area="" asp-controller="Employee" asp-action="Employees" style="text-decoration:none;">Dashboard</a>
-                    <a asp-area="" asp-controller="Employee" asp-action="AddEmployee" >
+                    <a asp-area="" asp-controller="Employee" asp-action="AddEmployee" data-bs-toggle="tooltip" data-bs-placement="top"
+                       data-bs-custom-class="custom-tooltip"
+                       data-bs-title="Add Data">
                         <ion-icon name="person-add-outline" class="fs-4 text-white mx-3 pe-auto"></ion-icon>
                     </a>
                 </span>
@@ -80,13 +85,23 @@
                                 <td>@data.Email</td>
                                 <td>@data.Department</td>
                                 <td class="d-flex flex-row align-items-center">
-                                    <a onclick="confirmDelete(@data.Id)" class="bg-danger text-center rounded text-center" style="cursor:pointer;">
+                                    <a onclick="confirmDelete(@data.Id)" class="bg-danger text-center rounded text-center" 
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Delete Data" style="cursor:pointer;">
                                         <ion-icon name="trash-outline" class="text-white fs-4 mx-1"></ion-icon>
                                     </a>
-                                    <a href="/Employee/UpdateEmployee/@data.Id" class="bg-success mx-1 rounded text-center" style="cursor:pointer;">
+                                    <a href="/Employee/UpdateEmployee/@data.Id" class="bg-success mx-1 rounded text-center"
+                                       data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="custom-tooltip"
+                                       data-bs-title="Edit Data"
+                                    style="cursor:pointer;">
                                         <ion-icon name="create-outline" class="text-white fs-4 mx-1"></ion-icon>
                                     </a>
-                                    <a href="/Employee/ViewEmployee/@data.Id" class="bg-primary mx-1 rounded text-center">
+                                    <a href="/Employee/ViewEmployee/@data.Id" class="bg-primary mx-1 rounded text-center"
+                                       data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="custom-tooltip"
+                                       data-bs-title="View Data">
                                         <ion-icon name="eye-outline" class="text-white fs-4 mx-1"></ion-icon>
                                     </a>
                                 </td>
@@ -128,8 +143,6 @@
         var confirmation = confirm("Are you sure you want to delete this data?")
         if (confirmation) {
             window.location.href = "/Employee/DeleteEmployee/?id=" + employeeId;
-        } else {
-            
         }
     }
 
