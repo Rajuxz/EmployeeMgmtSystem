@@ -182,7 +182,7 @@ namespace EmployeeMgmtSystem.Controllers
             List<EmployeeModel> employeeData;
             if (pg < 1)
                 pg = 1;
-
+            
             if (pagesize > 5)
                 pageSize = pagesize;
             if (!String.IsNullOrEmpty(searchQuery))
@@ -205,13 +205,18 @@ namespace EmployeeMgmtSystem.Controllers
                     employeeData = _employeeDbContext.Employees?.OrderBy(x=>x.Name).ToList();                
                 }
             }
-
+            
             int resultCount = employeeData.Count();
             var pager = new Pager(resultCount, pg, pageSize);
             int resSkip = (pg - 1) * pageSize;
             var data = employeeData.Skip(resSkip).Take(pager.PageSize).ToList();
             ViewBag.pager = pager;
             return data;
+        }
+
+        public IActionResult Test()
+        {
+            return View();
         }
        
     }
