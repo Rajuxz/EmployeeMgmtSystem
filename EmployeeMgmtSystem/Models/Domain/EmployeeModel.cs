@@ -12,5 +12,8 @@
         public string? Department { get; set; }
 
         public string? Image { get; set; }
+
+        //Establishing relationship between employees and assigned works.
+        public ICollection<AssignedWork>? AssignedWork { get; set; }
     }
 }
