@@ -9,5 +9,7 @@ namespace EmployeeMgmtSystem.Repository.IRepository
         T Get(Expression<Func<T, bool>> filter);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
+        public T FindById(int id);
+
     }
 }
