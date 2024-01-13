@@ -9,6 +9,7 @@ namespace EmployeeMgmtSystem.Repository.Implementation
     {
         private readonly EmployeeDbContext _dbContext;
         internal DbSet<T> database;
+
         public Repository(EmployeeDbContext dbContext)
         {
             _dbContext = dbContext;
