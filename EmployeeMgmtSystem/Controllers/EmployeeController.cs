@@ -108,6 +108,7 @@ namespace EmployeeMgmtSystem.Controllers
         {
             try
             {
+                var employee = _employeeRepo.FindById(updateVM.Id);
 
                 if (ModelState.IsValid)
                 {
@@ -117,13 +118,47 @@ namespace EmployeeMgmtSystem.Controllers
                         string filename = Guid.NewGuid().ToString() + updateVM.Image.FileName;
                         string filePath = Path.Combine(uploadFolder, filename);
                         updateVM.Image.CopyTo(new FileStream(filePath, FileMode.Create));
-
+                        employee.Image = filename;
                     }
+
+                    employee.Name = updateVM.Name;
+                    employee.Address = updateVM.Address;
+                    employee.Salary = updateVM.Salary;
+                    employee.Phone = updateVM.Phone;
+                    employee.Department = updateVM.Department;
+                    employee.Email = updateVM.Email;
+                    _employeeRepo.Update(employee);
+                    _employeeRepo.Save();
+                    TempData["SuccessMessage"] = "Data Updated Successfully!";
+                    return RedirectToAction("Employees");
                 }
+                TempData["ErrorMessage"] = "Inconsistant Modal State !";
+                return Redirect("Employees");
             }catch(Exception ex) {
                 TempData["ErrorMessage"] = $"Something went wrong.{ex.ToString()}";
                 return RedirectToAction("Employees");
             }
+        }
+        public IActionResult DeleteEmployee(int id)
+        {
+            try
+            {
+                var employee = _employeeRepo.FindById(id);
+                _employeeRepo.Remove(employee);
+                _employeeRepo.Save();
+                TempData["SuccessMessage"] = "Data Updated Successfully!";
+                return RedirectToAction("Employees");
+            }catch(Exception e)
+            {
+                TempData["ErrorMessage"] = $"Cannot Delete Data!{e.Message}";
+                return RedirectToAction("Employees");
+            }
+        }
+
+        public IActionResult ViewEmployee(int id)
+        {
+            var employee = _employeeRepo.Get(emp => emp.Id == id);
+            return View(employee);
         }
     }
 }
