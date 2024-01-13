@@ -14,12 +14,12 @@ namespace EmployeeMgmtSystem.Repository.Implementation
     
         public void Save()
         {
-            throw new NotImplementedException();
+            _employeeDbContext.SaveChanges();
         }
 
         public void Update(EmployeeModel model)
         {
-            _employeeDbContext.Update(model);
+            _employeeDbContext.Employees?.Update(model);
         }
     }
 }
