@@ -1,4 +1,6 @@
 using EmployeeMgmtSystem.DataContext;
+using EmployeeMgmtSystem.Repository.Implementation;
+using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +13,10 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
        options.UseNpgsql(connectionString)
 );
 
-
+//-----------------------------[Adding Services for Repository]----------------------------//
+builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
+builder.Services.AddTransient<IEmployeeRepository,EmployeeRepository>();
+//-----------------------------------------------------------------------------------------//
 var app = builder.Build();
 // ----------------[ Configure the HTTP request pipeline ] --------//
 if (!app.Environment.IsDevelopment())
