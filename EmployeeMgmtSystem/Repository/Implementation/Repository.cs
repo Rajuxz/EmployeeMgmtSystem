@@ -2,6 +2,7 @@
 using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EmployeeMgmtSystem.Repository.Implementation
 {
@@ -14,7 +15,6 @@ namespace EmployeeMgmtSystem.Repository.Implementation
         {
             _dbContext = dbContext;
             database = _dbContext.Set<T>();
-
             //For example: _dbContext.EmployeeTable == database. 
         }
 
@@ -44,6 +44,12 @@ namespace EmployeeMgmtSystem.Repository.Implementation
         public void RemoveRange(IEnumerable<T> entities)
         {
             database.RemoveRange(entities);
+        }
+
+        public T FindById(int id)
+        {
+            DbSet<T>? query = database;
+            return query.Find(id);
         }
     }
 }
