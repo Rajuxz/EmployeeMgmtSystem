@@ -1,6 +1,8 @@
 ﻿using EmployeeMgmtSystem.DataContext;
+using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeMgmtSystem.Repository.Implementation
 {
@@ -11,15 +13,17 @@ namespace EmployeeMgmtSystem.Repository.Implementation
         {
             _employeeDbContext = employeeDbContext;
         }
-    
+
         public void Save()
         {
             _employeeDbContext.SaveChanges();
         }
 
+
         public void Update(EmployeeModel model)
         {
             _employeeDbContext.Employees?.Update(model);
         }
+      
     }
 }
