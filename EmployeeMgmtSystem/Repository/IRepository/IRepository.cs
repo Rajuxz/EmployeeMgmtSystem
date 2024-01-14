@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace EmployeeMgmtSystem.Repository.IRepository
 {
@@ -10,6 +11,7 @@ namespace EmployeeMgmtSystem.Repository.IRepository
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
         public T FindById(int id);
+
 
     }
 }
