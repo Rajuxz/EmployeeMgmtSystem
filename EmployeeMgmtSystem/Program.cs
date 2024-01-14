@@ -14,8 +14,10 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 );
 
 //-----------------------------[Adding Services for Repository]----------------------------//
+
 builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IEmployeeRepository,EmployeeRepository>();
+
 //-----------------------------------------------------------------------------------------//
 var app = builder.Build();
 // ----------------[ Configure the HTTP request pipeline ] --------//
