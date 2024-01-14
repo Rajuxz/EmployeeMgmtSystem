@@ -3,6 +3,7 @@ using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql.Internal.TypeHandlers;
@@ -50,11 +51,7 @@ namespace EmployeeMgmtSystem.Controllers
                 string filename = "default.png";
                 if (employeeVm.Image != null)
                 { 
-                    string uploadFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
-                    filename = Guid.NewGuid().ToString() + employeeVm.Image.FileName;
-                    string filePath = Path.Combine(uploadFolder, filename);
-                    employeeVm.Image.CopyTo(new FileStream(filePath, FileMode.Create));
-
+                   filename = _employeeRepo.SaveFileAndReturnName("images", employeeVm.Image);
                 }
                 var employee = new EmployeeModel()
                 {
@@ -69,12 +66,12 @@ namespace EmployeeMgmtSystem.Controllers
                 };
                 _employeeRepo.Add(employee);
                 _employeeRepo.Save();
-                TempData["SuccessMessage"] = "Employee Data Added Successfully.";
+                SetMessage("Data Inserted Successfully !", "SuccessMessage");
                 return RedirectToAction("Employees");
 
             }catch(Exception e)
             {
-                TempData["ErrorMessage"] = $"Cannot add data. {e.ToString()}";
+                SetMessage($"Opps !! Cannot Add Data. {e.Message}", "ErrorMessage");
                 return RedirectToAction("Employees");
             }
             
@@ -99,7 +96,7 @@ namespace EmployeeMgmtSystem.Controllers
             }
             else
             {
-                TempData["ErrorMessage"] = "Opps !! Data Not Found. ";
+                SetMessage("Opps !! Data Not Found. ", "ErrorMessage");
                 return RedirectToAction("Employees");
             }
         }
@@ -112,15 +109,11 @@ namespace EmployeeMgmtSystem.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if(updateVM.Image != null)
+                    if (updateVM.Image != null)
                     {
-                        string uploadFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
-                        string filename = Guid.NewGuid().ToString() + updateVM.Image.FileName;
-                        string filePath = Path.Combine(uploadFolder, filename);
-                        updateVM.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+                        string filename = _employeeRepo.SaveFileAndReturnName("images", updateVM.Image);
                         employee.Image = filename;
                     }
-
                     employee.Name = updateVM.Name;
                     employee.Address = updateVM.Address;
                     employee.Salary = updateVM.Salary;
@@ -129,13 +122,14 @@ namespace EmployeeMgmtSystem.Controllers
                     employee.Email = updateVM.Email;
                     _employeeRepo.Update(employee);
                     _employeeRepo.Save();
-                    TempData["SuccessMessage"] = "Data Updated Successfully!";
+
+                    SetMessage("Data Successfully Updated.", "SuccessMessage");
                     return RedirectToAction("Employees");
                 }
-                TempData["ErrorMessage"] = "Inconsistant Modal State !";
-                return Redirect("Employees");
+                    SetMessage("Inconsistant Modal State !", "ErrorMessage");
+                    return Redirect("Employees");
             }catch(Exception ex) {
-                TempData["ErrorMessage"] = $"Something went wrong.{ex.ToString()}";
+                SetMessage($"Something went wrong. {ex.ToString()}","ErrorMessage");
                 return RedirectToAction("Employees");
             }
         }
@@ -146,11 +140,11 @@ namespace EmployeeMgmtSystem.Controllers
                 var employee = _employeeRepo.FindById(id);
                 _employeeRepo.Remove(employee);
                 _employeeRepo.Save();
-                TempData["SuccessMessage"] = "Data Updated Successfully!";
+                SetMessage("Data Successfully Deleted.", "SuccessMessage");
                 return RedirectToAction("Employees");
             }catch(Exception e)
             {
-                TempData["ErrorMessage"] = $"Cannot Delete Data!{e.Message}";
+                SetMessage($"Cannot Delete data. {e.Message}", "ErrorMessage");
                 return RedirectToAction("Employees");
             }
         }
@@ -159,6 +153,11 @@ namespace EmployeeMgmtSystem.Controllers
         {
             var employee = _employeeRepo.Get(emp => emp.Id == id);
             return View(employee);
+        }
+
+        public void SetMessage(string message, string messageType)
+        {
+            TempData[messageType] = message;
         }
     }
 }
