@@ -6,5 +6,6 @@ namespace EmployeeMgmtSystem.Repository.IRepository
     {
         void Update(EmployeeModel model);
         void Save();
+        public string? SaveFileAndReturnName(string path, IFormFile formFile);
     }
 }
