@@ -1,4 +1,5 @@
 ﻿using EmployeeMgmtSystem.DataContext;
+using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -51,5 +52,7 @@ namespace EmployeeMgmtSystem.Repository.Implementation
             DbSet<T>? query = database;
             return query.Find(id);
         }
+
+     
     }
 }
