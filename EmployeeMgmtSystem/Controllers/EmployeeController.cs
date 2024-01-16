@@ -3,13 +3,6 @@ using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Npgsql.Internal.TypeHandlers;
-using System.Net;
-using System.Numerics;
-using System.Xml.Linq;
 
 namespace EmployeeMgmtSystem.Controllers
 {
@@ -26,12 +19,16 @@ namespace EmployeeMgmtSystem.Controllers
             return View();
         }
 
+        public IActionResult GetData()
+        {
+            List<EmployeeModel> employees = _employeeRepo.GetAll().ToList();
+            return Json(employees);
+        }
         public IActionResult Employees()
         {
             try
             {
-                List<EmployeeModel> employee = _employeeRepo.GetAll().ToList();
-                return View(employee);
+                return View();
             }
             catch (Exception ex)
             {
