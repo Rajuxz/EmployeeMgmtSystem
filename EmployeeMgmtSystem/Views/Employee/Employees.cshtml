@@ -18,6 +18,8 @@
 
 @model IEnumerable<EmployeeMgmtSystem.Models.Domain.EmployeeModel>
 
+
+
 <div class="container">
     <div class="d-flex flex-column">
         <div class="col-md-10 mb-3">
@@ -32,35 +34,11 @@
                 </span>
             </div>
         </div>
-            <div class="col-md-10 d-flex flex-row justify-content-between">
-                <div class="input-group mb-3">
-                    <span id="errorSpan"></span>
-                    <form class="d-flex flex-row" action="@Url.Action("Employees","Employee")">
-                        <input type="text" name="searchQuery" id="searchQuery" class="form-control" placeholder="Search....">
-                        <button onclick="preventReload()" class="outline-none" style="border:none;background:#43aa8b;border-top-right-radius:5px;color:white;">
-                            <ion-icon name="search-outline" class="mx-1 fs-5 border-1 border-dark "></ion-icon>
-                        </button>
-                    </form>
-                </div>
-                 <div class="">
-                     <form method="get" id="filterForm" >
-                        <select id="selectSortType" name="sortType" class="form-select form-select-lg mb-3" aria-label="Sort">
-                            <option value ="0">Filter &nbsp;&nbsp;&nbsp;</option>
-                            <option value="1">Ascending</option>
-                            <option value="2">Descending</option>
-                        </select>
-                     </form>
-                </div>
-               
-            </div>
         <div class="col col-md-10">
-            @if (Model != null)
-            {
-
-                <table class="table">
+            <table class="display table table-bordered table-striped " id="dataTable">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
+                            @* <th scope="col">Id</th> *@
                             <th scope="col">Name</th>
                             <th scope="col">Address</th>
                             <th scope="col">Salary</th>
@@ -68,92 +46,78 @@
                             <th scope="col">Position</th>
                             <th scope="col">Email</th>
                             <th scope="col">Department</th>
-                            <th scope="col">Action</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var data in Model)
-                        {
-
-                            <tr>
-                                <th scope="row">@counter</th>
-                                <td>@data.Name</td>
-                                <td>@data.Address</td>
-                                <td>@data.Salary</td>
-                                <td>@data.Phone</td>
-                                <td>@data.Position</td>
-                                <td>@data.Email</td>
-                                <td>@data.Department</td>
-                                <td class="d-flex flex-row align-items-center">
-                                    <a onclick="confirmDelete(@data.Id)" class="bg-danger text-center rounded text-center" 
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        data-bs-custom-class="custom-tooltip"
-                                        data-bs-title="Delete Data" style="cursor:pointer;">
-                                        <ion-icon name="trash-outline" class="text-white fs-4 mx-1"></ion-icon>
-                                    </a>
-                                    <a href="/Employee/UpdateEmployee/@data.Id" class="bg-success mx-1 rounded text-center"
-                                       data-bs-toggle="tooltip" data-bs-placement="top"
-                                       data-bs-custom-class="custom-tooltip"
-                                       data-bs-title="Edit Data"
-                                    style="cursor:pointer;">
-                                        <ion-icon name="create-outline" class="text-white fs-4 mx-1"></ion-icon>
-                                    </a>
-                                    <a href="/Employee/ViewEmployee/@data.Id" class="bg-primary mx-1 rounded text-center"
-                                       data-bs-toggle="tooltip" data-bs-placement="top"
-                                       data-bs-custom-class="custom-tooltip"
-                                       data-bs-title="View Data">
-                                        <ion-icon name="eye-outline" class="text-white fs-4 mx-1"></ion-icon>
-                                    </a>
-                                </td>
-                            </tr>
-                            counter++;
-                        }
-
+                        <!--Body-->
+                       
                     </tbody>
-                </table>
-                <partial name="~/Views/Shared/_Pagination.cshtml" model="@pager" />
-
-            }
-            else
-            {
-                <div class="alert alert-secondary" role="alert">
-                    No Data Found !!
-                </div>
-            }
+        </table>
         </div>
     </div>
 </div>
 
+@section scripts{
 
+<script type="text/javascript" src="~/js/jquery.dataTables.js" ></script>
+<link rel="stylesheet" href="~/css//jquery.dataTables.css" />
 <script>
-    var selectSortType = document.getElementById('selectSortType')
-    var filterForm = document.getElementById('filterForm')
-    selectSortType.addEventListener('change', function () {
-        var selectedValue = selectSortType.value
-        if (selectedValue !== '0' && selectedValue <3) {
-            setTimeout(function () {
-                var xhr = new XMLHttpRequest()
-                xhr.open("GET","/Employee/Employees?sortId="+selectedValue,true)
-                filterForm.submit()
-            }, 3000);
-        }
-    })
+    $(function () {
+        const table = $('#dataTable').DataTable({
+            pageLength: 5,
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            responsive: true,
+            ajax: {
+                "url": "/Employee/GetData",
+                "type": "GET",
+                "dataType": "json",
+                dataSrc: '',
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "address" },
+                { "data": "salary" },
+                { "data": "phone" },
+                { "data": "position" },
+                { "data": "email" },
+                { "data": "department" },
+                {
+                    data: null,
+                    className: "dt-editor delete",
+                    defaultContent: '<ion-icon name="trash-outline" class="fs-5 text-danger"></ion-icon>',
+                    orderable: false
+                }, {
+                    data: null,
+                    className: "dt-editor editor-edit",
+                    defaultContent: '<ion-icon name="create-outline" class="fs-5 dt-editor editor-edit cursor-pointer"></ion-icon>',
+                    orderable: false
+                },
+            ],
+        //table edit
+            "createdRow" : function (row, data, dataIndex) {
+                // Add data-id attribute to the row
+                $(row).attr("data-id", data.id);
 
-    function confirmDelete( employeeId ){
-        var confirmation = confirm("Are you sure you want to delete this data?")
-        if (confirmation) {
-            window.location.href = "/Employee/DeleteEmployee/?id=" + employeeId;
-        }
-    }
+                // Add click event for delete icon
+                $(".delete", row).on("click", function () {
+                    var id = $(row).data("id");
+                   var confirm = window.confirm("Are you sure to delete this item?")
+                   if(confirm){
+                       window.location.href = "/Employee/DeleteEmployee/" + id;
+                   }
+                });
 
-    function preventReload(){
+                // Add click event for edit icon
+                $(".editor-edit", row).on("click", function () {
+                    var id = $(row).data("id");
+                    // Redirect to the edit page with the corresponding ID
+                    window.location.href = "/Employee/UpdateEmployee/" + id;
+                });
+            }
+        });
 
-        var searchQuery = document.getElementById('searchQuery').value
-        var errorMessageSpan = document.getElementById('errorSpan')
-        if (searchQuery === '') {
-            errorMessageSpan.innerHTML = "<small style='color:red;font-size:10px;'>Empty query..</small>"
-            event.preventDefault()
-        }
-       
-    }
+    });
 </script>
+}
