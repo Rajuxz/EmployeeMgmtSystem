@@ -17,8 +17,8 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "Login/";
-        options.LogoutPath = "Index/";
+        options.LoginPath = "/Employee/Login/";
+        options.LogoutPath = "/Employee/Index/";
     });
 
 //-----------------------------[Adding Services for Repository]----------------------------//
