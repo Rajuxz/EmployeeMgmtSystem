@@ -1,24 +1,8 @@
 ﻿@{
     ViewData["Title"] = "View Employees";
-    int counter = 1; //Initialize the counter.
-    Pager pager = new Pager();
-    int pageNumber = 0; //Default page number is 0.
-    int copyCounter = counter;
-    if(ViewBag.Pager != null)
-    {
-        pager = ViewBag.Pager;
-        pageNumber = pager.CurrentPage;
-    }
-    //Track the page number
-     
-
 }
 
 <partial name="~/Views/Shared/_Notification.cshtml" />
-
-@model IEnumerable<EmployeeMgmtSystem.Models.Domain.EmployeeModel>
-
-
 
 <div class="container">
     <div class="d-flex flex-column">
