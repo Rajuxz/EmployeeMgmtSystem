@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeMgmtSystem.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         IWebHostEnvironment _webHostEnv;        
@@ -15,6 +16,7 @@ namespace EmployeeMgmtSystem.Controllers
             _employeeRepo = employeeRepo;
             _webHostEnv = webHostEnv;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -25,7 +27,6 @@ namespace EmployeeMgmtSystem.Controllers
             List<EmployeeModel> employees = _employeeRepo.GetAll().ToList();
             return Json(employees);
         }
-        [Authorize]
         public IActionResult Employees()
         {
             try
@@ -113,14 +114,14 @@ namespace EmployeeMgmtSystem.Controllers
                         string filename = _employeeRepo.SaveFileAndReturnName("images", updateVM.Image);
                         employee.Image = filename;
                     }
-                    employee.Name = updateVM.Name;
-                    employee.Address = updateVM.Address;
-                    employee.Salary = updateVM.Salary;
-                    employee.Phone = updateVM.Phone;
-                    employee.Department = updateVM.Department;
-                    employee.Email = updateVM.Email;
-                    _employeeRepo.Update(employee);
-                    _employeeRepo.Save();
+                        employee.Name = updateVM.Name;
+                        employee.Address = updateVM.Address;
+                        employee.Salary = updateVM.Salary;
+                        employee.Phone = updateVM.Phone;
+                        employee.Department = updateVM.Department;
+                        employee.Email = updateVM.Email;
+                        _employeeRepo.Update(employee);
+                        _employeeRepo.Save();
 
                     SetMessage("Data Successfully Updated.", "SuccessMessage");
                     return RedirectToAction("Employees");
@@ -158,5 +159,13 @@ namespace EmployeeMgmtSystem.Controllers
         {
             TempData[messageType] = message;
         }
+
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        
     }
 }
