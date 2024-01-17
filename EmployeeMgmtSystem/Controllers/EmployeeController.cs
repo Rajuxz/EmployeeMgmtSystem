@@ -2,6 +2,7 @@
 using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeMgmtSystem.Controllers
@@ -24,6 +25,7 @@ namespace EmployeeMgmtSystem.Controllers
             List<EmployeeModel> employees = _employeeRepo.GetAll().ToList();
             return Json(employees);
         }
+        [Authorize]
         public IActionResult Employees()
         {
             try
