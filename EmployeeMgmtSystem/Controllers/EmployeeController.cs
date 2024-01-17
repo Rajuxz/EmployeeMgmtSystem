@@ -1,9 +1,11 @@
-﻿using EmployeeMgmtSystem.DataContext;
-using EmployeeMgmtSystem.Models;
+﻿using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EmployeeMgmtSystem.Controllers
 {
@@ -12,9 +14,11 @@ namespace EmployeeMgmtSystem.Controllers
     {
         IWebHostEnvironment _webHostEnv;        
         private readonly IEmployeeRepository _employeeRepo;
-        public EmployeeController(IEmployeeRepository employeeRepo,IWebHostEnvironment webHostEnv) {
+        private readonly IAdminRepository _adminRepository;
+        public EmployeeController(IEmployeeRepository employeeRepo,IWebHostEnvironment webHostEnv,IAdminRepository adminRepository) {
             _employeeRepo = employeeRepo;
             _webHostEnv = webHostEnv;
+            _adminRepository = adminRepository;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -165,7 +169,34 @@ namespace EmployeeMgmtSystem.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password, string returnUrl)
+        {
 
-        
+            var admin = _adminRepository.Get(x => x.Email == email && x.Password == password);
+            if(admin!= null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name,admin.Name)
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, "Employees");
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity));
+                return Redirect(returnUrl == null ? "/Employee/Employees/" : "/Employee/Login");
+            }
+            else
+            {
+                return View();
+            }
+
+        }
+
+		[AllowAnonymous]
+        [HttpPost]
+		public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index");
+        }
     }
 }
