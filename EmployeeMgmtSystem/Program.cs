@@ -1,6 +1,7 @@
 using EmployeeMgmtSystem.DataContext;
 using EmployeeMgmtSystem.Repository.Implementation;
 using EmployeeMgmtSystem.Repository.IRepository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
        options.UseNpgsql(connectionString)
 );
+//---------------------------------[Adding cookie based authentication]--------------------//
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "Login/";
+        options.LogoutPath = "Index/";
+    });
 
 //-----------------------------[Adding Services for Repository]----------------------------//
 
@@ -32,10 +40,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 
+app.UseAuthorization();
+app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Employee}/{action=Index}/{id?}");
+    pattern: "{controller=Employee}/{action=Index}/{id?}"
+    );
 
 app.Run();
