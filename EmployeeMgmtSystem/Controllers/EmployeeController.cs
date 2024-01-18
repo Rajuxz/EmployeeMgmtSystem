@@ -12,20 +12,12 @@ namespace EmployeeMgmtSystem.Controllers
     [Authorize]
     public class EmployeeController : Controller
     {
-        IWebHostEnvironment _webHostEnv;        
+        private readonly ILogger<EmployeeController> _logger;
         private readonly IEmployeeRepository _employeeRepo;
-        private readonly IAdminRepository _adminRepository;
-        public EmployeeController(IEmployeeRepository employeeRepo,IWebHostEnvironment webHostEnv,IAdminRepository adminRepository) {
+        public EmployeeController(IEmployeeRepository employeeRepo,ILogger<EmployeeController> logger) {
             _employeeRepo = employeeRepo;
-            _webHostEnv = webHostEnv;
-            _adminRepository = adminRepository;
+            _logger = logger;
         }
-        [AllowAnonymous]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult GetData()
         {
             List<EmployeeModel> employees = _employeeRepo.GetAll().ToList();
@@ -33,15 +25,8 @@ namespace EmployeeMgmtSystem.Controllers
         }
         public IActionResult Employees()
         {
-            try
-            {
-                return View();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error Aayo {ex.ToString()}");
-                return View(ex);
-            }
+
+            return View();
         }
         public IActionResult AddEmployee()
         {
@@ -162,41 +147,6 @@ namespace EmployeeMgmtSystem.Controllers
         public void SetMessage(string message, string messageType)
         {
             TempData[messageType] = message;
-        }
-
-        [AllowAnonymous]
-        public IActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Login(string email, string password, string returnUrl)
-        {
-
-            var admin = _adminRepository.Get(x => x.Email == email && x.Password == password);
-            if(admin!= null)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,admin.Name)
-                };
-                var claimsIdentity = new ClaimsIdentity(claims, "Employees");
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity));
-                return Redirect(returnUrl == null ? "/Employee/Employees/" : "/Employee/Login");
-            }
-            else
-            {
-                return View();
-            }
-
-        }
-
-		[AllowAnonymous]
-        [HttpPost]
-		public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
         }
     }
 }
