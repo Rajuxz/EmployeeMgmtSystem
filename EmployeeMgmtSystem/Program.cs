@@ -23,7 +23,7 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login/";
+        options.LoginPath = "/Home/Login";
         options.LogoutPath = "/Home/Index/";
     });
 
