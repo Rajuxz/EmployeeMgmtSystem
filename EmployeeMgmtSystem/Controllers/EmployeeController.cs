@@ -1,15 +1,12 @@
 ﻿using EmployeeMgmtSystem.Models;
 using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace EmployeeMgmtSystem.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;
