@@ -6,6 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Logger
+builder.Host.ConfigureLogging(logging =>
+{
+	logging.ClearProviders();
+	logging.AddConsole();
+});
 // ----------------[ Add service to the container ]--------------//
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -17,8 +23,8 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Employee/Login/";
-        options.LogoutPath = "/Employee/Index/";
+        options.LoginPath = "/Home/Login/";
+        options.LogoutPath = "/Home/Index/";
     });
 
 //-----------------------------[Adding Services for Repository]----------------------------//
@@ -46,7 +52,7 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Employee}/{action=Index}/{id?}"
+    pattern: "{controller=Home}/{action=Index}/{id?}"
     );
 
 app.Run();
