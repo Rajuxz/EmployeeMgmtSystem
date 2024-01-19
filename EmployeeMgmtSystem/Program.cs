@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Home/Login";
-        options.LogoutPath = "/Home/Index/";
+        options.LogoutPath = "/";
     });
 
 //-----------------------------[Adding Services for Repository]----------------------------//
@@ -53,6 +53,11 @@ app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+
+app.MapControllerRoute(
+    name:"employee",
+    pattern:"{controller=Employee}/{Action=Employees}/{id?}"
     );
 
 app.Run();
