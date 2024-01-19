@@ -1,6 +1,9 @@
 ﻿@{
     Layout = "_CustomLayout";
+    var ReturnUrl = ViewData["ReturnUrl"];
 }
+@model EmployeeMgmtSystem.Models.LoginViewModel
+
 <partial name="~/Views/Shared/_Notification.cshtml" />
 <!-- Section: Design Block -->
 <section class="background-radial-gradient overflow-hidden">
@@ -67,7 +70,7 @@
 
         <div class="card bg-glass">
           <div class="card-body px-4 py-5 px-md-5">
-            <form method="post" action="Login" id="loginform">
+            <form method="post" asp-action="Login" id="loginform" asp-controller="Home" asp-route-ReturnUrl="@ReturnUrl">
               <!-- 2 column grid layout with text inputs for the first and last names -->
               <div class="row">
                 <div class="col-md-6 mb-2">
@@ -80,13 +83,13 @@
 
               <!-- Email input -->
               <div class="form-floating  mb-4">
-                <input type="email" id="emailAddress" class="form-control" name="Email" placeholder="Email Address" />
+                <input type="email" id="emailAddress" class="form-control" asp-for="Email" placeholder="Email Address" />
                 <label for="emailAddress">Email address</label>
               </div>
 
               <!-- Password input -->
               <div class="form-floating mb-4">
-                <input type="password" id="password" class="form-control" name="Password" placeholder="Password"/>
+                <input type="password" id="password" class="form-control" asp-for="Password" placeholder="Password"/>
                 <label for="password">Password</label>
               </div>
               <!-- Submit button -->
