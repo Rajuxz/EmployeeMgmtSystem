@@ -7,6 +7,7 @@ namespace EmployeeMgmtSystem.DataContext
     {
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options) { }
 
+
         public DbSet<AdminModel>? Admins { get; set; }
         public DbSet<EmployeeModel>? Employees { get; set; }
         public DbSet<AssignedWork>? AssignedWorks { get; set; }
