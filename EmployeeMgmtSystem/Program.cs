@@ -48,8 +48,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthorization();
+//--------------------[Use this middleware correctly ]-----------------------//
+
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
