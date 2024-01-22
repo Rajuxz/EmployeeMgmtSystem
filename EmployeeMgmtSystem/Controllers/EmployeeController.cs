@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeMgmtSystem.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;
@@ -14,6 +14,11 @@ namespace EmployeeMgmtSystem.Controllers
         public EmployeeController(IEmployeeRepository employeeRepo,ILogger<EmployeeController> logger) {
             _employeeRepo = employeeRepo;
             _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
         public IActionResult GetData()
         {
