@@ -30,13 +30,14 @@ namespace EmployeeMgmtSystem.Controllers
 		{
 			LoginViewModel loginVm = new LoginViewModel();
 			ViewData["ReturnUrl"] = ReturnUrl;
-			return View(loginVm);
+            return View(loginVm);
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginViewModel loginVM,string? ReturnUrl=null)
 		{
-			var admin = _adminRepo.Get(x=>x.Email == loginVM.Email.ToLower());
+
+            var admin = _adminRepo.Get(x=>x.Email == loginVM.Email.ToLower());
 			if (admin != null)
 			{
 				if(admin.Password ==  loginVM.Password)
@@ -48,21 +49,24 @@ namespace EmployeeMgmtSystem.Controllers
 					};
 					var identity = new ClaimsIdentity(claim,CookieAuthenticationDefaults.AuthenticationScheme);
 					var principal = new ClaimsPrincipal(identity);
-					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal,new AuthenticationProperties()
+					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+						principal,new AuthenticationProperties()
 					{
 						IsPersistent = true
 					});
 
 					TempData["SuccessMessage"] = $"Welcome {admin.Name}";
-					return RedirectToAction("Employees","Employee");
+					return LocalRedirect(ReturnUrl);
 				}
 				else
 				{
-					return Content("Password doesnot matched.");
+                    TempData["ErrorMessage"] = "Opps! Incorrect Password";
+					return RedirectToAction("Login");
 				}
 			}
-			return Content("Failed.");
-		}
+            TempData["ErrorMessage"] = "Opps! No Admin found.";
+            return RedirectToAction("Login");
+        }
 
 
 		public async Task<IActionResult> Logout()
