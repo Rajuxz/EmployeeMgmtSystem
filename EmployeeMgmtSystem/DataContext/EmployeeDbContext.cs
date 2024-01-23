@@ -11,5 +11,6 @@ namespace EmployeeMgmtSystem.DataContext
         public DbSet<AdminModel>? Admins { get; set; }
         public DbSet<EmployeeModel>? Employees { get; set; }
         public DbSet<AssignedWork>? AssignedWorks { get; set; }
+        public DbSet<Department>? Department { get; set; }
     }
 }
