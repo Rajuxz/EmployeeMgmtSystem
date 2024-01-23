@@ -53,6 +53,7 @@ namespace EmployeeMgmtSystem.Repository.Implementation
             return query.Find(id);
         }
 
+
      
     }
 }
