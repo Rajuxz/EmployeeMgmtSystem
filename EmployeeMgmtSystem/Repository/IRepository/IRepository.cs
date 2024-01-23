@@ -12,6 +12,5 @@ namespace EmployeeMgmtSystem.Repository.IRepository
         void RemoveRange(IEnumerable<T> entities);
         public T FindById(int id);
 
-
     }
 }
