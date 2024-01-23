@@ -11,5 +11,7 @@ namespace EmployeeMgmtSystem.Models.Domain
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+
+        public string Profile { get; set; } = "default.png";
     }
 }
