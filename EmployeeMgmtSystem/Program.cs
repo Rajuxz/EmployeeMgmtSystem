@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IEmployeeRepository,EmployeeRepository>();
 builder.Services.AddTransient<IAdminRepository,AdminRepository>();
+builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
 
 //-----------------------------------------------------------------------------------------//
 var app = builder.Build();
