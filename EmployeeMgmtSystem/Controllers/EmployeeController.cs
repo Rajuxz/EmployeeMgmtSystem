@@ -18,6 +18,9 @@ namespace EmployeeMgmtSystem.Controllers
 
         public IActionResult Index()
         {
+            var res = _employeeRepo.GetAll().ToList();
+            int data = res.Count();
+            ViewBag.EmployeeCount = data;
             return View();
         }
         public IActionResult GetData()
