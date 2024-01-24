@@ -53,7 +53,11 @@ namespace EmployeeMgmtSystem.Repository.Implementation
             return query.Find(id);
         }
 
-
+       public int Count()
+        {
+           int result =  database.Count();
+           return result;
+        }
      
     }
 }
