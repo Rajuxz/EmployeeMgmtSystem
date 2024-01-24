@@ -5,25 +5,33 @@
     <div class="row">
         <div class="col-md-8">
             <table class="table table-striped border border-1" id="addDepartmentTable">
-                <thead>
-                    <tr>
-                        <th>Department</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
                 <tbody>
                     <tr>
                         <td>
                             <form>
-                                <input type="text" class="form-control" placeholder="Department Name"/>
+                                <input type="text" id="departmentName" class="form-control" placeholder="Department Name" />
                             </form>
                         </td>
                         <td> 
-                            <button class="btn btn-primary" onclick="addTableRow();" id="submitForm">
+                            <button class="btn btn-primary" id="submitForm">
                                     +
                             </button>
                         </td>
                     </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-striped border border-1" id="viewDepartments">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Department</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
                 </tbody>
             </table>
         </div>
@@ -31,12 +39,128 @@
 </div>
 
 @section Scripts{
+    <script type="text/javascript" src="~/js/jquery.dataTables.js" ></script>
+    <link rel="stylesheet" href="~/css/jquery.dataTables.css" />
     <script>
         const submitBtn = document.querySelector('#submitForm')
         submitBtn.addEventListener('click', function (e) {
             e.preventDefault()
-            
+            const departmentName = document.getElementById('departmentName')
+            if (departmentName.value === '') {
+                departmentName.style.borderColor = 'red'
+            }else{
+                const data = {
+                    "Name" : departmentName.value
+                }
+
+                fetch('/Department/AddDepartment/', {
+                    method : 'POST',
+                    headers: {
+                        'Content-Type' : "application/json"
+                    },
+                    body:JSON.stringify(data)
+                }).then(res=>res.json())
+                    .then(data => {
+                       window.location.reload()
+                    }).catch(error => {
+                        alert(error)
+                    })
+            }
+        });
+
+        const table = $('#viewDepartments').DataTable({
+            pageLength: 5,
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            responsive: true,
+            ajax: {
+                "url": "/Department/GetDepartments",
+                "type": "GET",
+                "dataType": "json",
+                dataSrc: '',
+            },
+            "columns": [
+
+
+                { "data": "id" },
+                { "data": "name" },
+                {
+                    data: null,
+                    className: "dt-editor delete",
+                    defaultContent: '<i class="fa-solid fa-trash fs-5 dt-editor editor-delete cursor-pointer text-danger"></i>',
+                    orderable: false
+                }, {
+                    data: null,
+                    className: "dt-editor editor-edit",
+                    defaultContent: '<i class="fa-solid fa-pencil fs-5 dt-editor editor-edit cursor-pointer text-success"></i>',
+                    orderable: false
+                },
+            ]
         })
 
     </script>
 }
+
+<!--
+
+
+<script type="text/javascript" src="~/js/jquery.dataTables.js" ></script>
+<link rel="stylesheet" href="~/css/jquery.dataTables.css" />
+<script>
+    $(function () {
+        const table = $('#dataTable').DataTable({
+            pageLength: 5,
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            responsive: true,
+            ajax: {
+                "url": "/Employee/GetData",
+                "type": "GET",
+                "dataType": "json",
+                dataSrc: '',
+            },
+            "columns": [
+
+
+                { "data": "name" },
+                { "data": "address" },
+                { "data": "salary" },
+                { "data": "phone",orderable:false },
+                { "data": "position" },
+                { "data": "email" },
+                { "data": "department" },
+                {
+                    data: null,
+                    className: "dt-editor delete",
+                    defaultContent: '<ion-icon name="trash-outline" class="fs-5 text-danger"></ion-icon>',
+                    orderable: false
+                }, {
+                    data: null,
+                    className: "dt-editor editor-edit",
+                    defaultContent: '<ion-icon name="create-outline" class="fs-5 dt-editor editor-edit cursor-pointer"></ion-icon>',
+                    orderable: false
+                },
+            ],
+        //table edit
+            "createdRow" : function (row, data, dataIndex) {
+                // Add data-id attribute to the row
+                $(row).attr("data-id", data.id);
+
+                // Add click event for delete icon
+                $(".delete", row).on("click", function () {
+                    var id = $(row).data("id");
+                   var confirm = window.confirm("Are you sure to delete this item?")
+                   if(confirm){
+                       window.location.href = "/Employee/DeleteEmployee/" + id;
+                   }
+                });
+
+                // Add click event for edit icon
+                $(".editor-edit", row).on("click", function () {
+                    var id = $(row).data("id");
+                    // Redirect to the edit page with the corresponding ID
+                    window.location.href = "/Employee/UpdateEmployee/" + id;
+                });
+            }
+        });
+
+    });
+-->
