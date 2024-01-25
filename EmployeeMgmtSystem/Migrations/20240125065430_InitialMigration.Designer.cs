@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EmployeeMgmtSystem.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20240117152327_AdminTableAddedMigration")]
-    partial class AdminTableAddedMigration
+    [Migration("20240125065430_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,10 @@ namespace EmployeeMgmtSystem.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Profile")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -79,7 +83,7 @@ namespace EmployeeMgmtSystem.Migrations
                     b.ToTable("AssignedWorks");
                 });
 
-            modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
+            modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,11 +91,25 @@ namespace EmployeeMgmtSystem.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("Department")
-                        .HasColumnType("text");
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -125,6 +143,17 @@ namespace EmployeeMgmtSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
+                {
+                    b.HasOne("EmployeeMgmtSystem.Models.Domain.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>

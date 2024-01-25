@@ -101,16 +101,13 @@ namespace EmployeeMgmtSystem.Migrations
             modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("Department")
-                        .HasColumnType("text");
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -144,6 +141,17 @@ namespace EmployeeMgmtSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
+                {
+                    b.HasOne("EmployeeMgmtSystem.Models.Domain.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("EmployeeMgmtSystem.Models.Domain.EmployeeModel", b =>
