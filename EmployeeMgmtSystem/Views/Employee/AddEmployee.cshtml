@@ -1,16 +1,16 @@
-﻿
-@{
-    Layout = "_CustomLayout";
+﻿@{
+    Layout = "_AdminLayout";
 
 }
-@model EmployeeViewModel
+@using EmployeeMgmtSystem.Models.Domain
+@model EmployeeMgmtSystem.Models.EmployeeViewModel
 
 <div class="container">
 <div class="d-flex flex-column">
-    <div class="col-md-4 mt-2 d-flex justify-content-between" style="background: #1ccad8;">
-        <span class="fw-bold mx-3 fs-5 p-1">Add Employee</span>
+        <div class="col-md-4 mt-2 d-flex justify-content-between" style="background:  #5B77CD;">
+        <span class="fw-bold mx-3 fs-5 p-1 text-light">Add Employee</span>
         <a asp-area="" asp-controller="Employee" asp-action = "Employees">
-            <ion-icon name="arrow-back-outline" class="fs-4 p-2 text-dark"></ion-icon>
+            <i class=" fa-solid fa-arrow-left fs-6 p-2 text-white"></i>
         </a>
     </div>
     <form method="post" action="AddEmployee" enctype="multipart/form-data">
@@ -39,10 +39,12 @@
             @Html.TextBoxFor(x=>x.Email,new{@class = "form-control",placeholder="Email", type="email",required="required"})
             @Html.LabelFor(x=>x.Email)
         </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Department,new{@class = "form-control",placeholder="Department",required="required"})
-            @Html.LabelFor(x=>x.Department)
-        </div> 
+        <div class="form-group">
+        <label>Department</label>
+        <select asp-for="SelectedDepartmentId" asp-items="new SelectList(Model.Departments,nameof(Department.Id),nameof(Department.Name))" class="form-control">
+            <option>Select Department</option>
+        </select>
+    </div>
         <div class="form-floating mb-2">
             <input type="file" class="form-control" placeholder="Image" asp-for="Image" required/>
             @Html.LabelFor(x=>x.Image)
