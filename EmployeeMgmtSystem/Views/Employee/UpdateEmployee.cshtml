@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_CustomLayout";
+    Layout = "_AdminLayout";
 }
 @model UpdateEmployeeViewModel
 <partial name="~/Views/Shared/_Notification.cshtml" />
@@ -7,10 +7,10 @@
 @* Adding Something *@
 <div class="container">
     <div class="d-flex flex-column">
-        <div class="col-md-4 mt-2 d-flex justify-content-between" style="background: #1ccad8;">
-            <span class="fw-bold mx-3 fs-5 p-1">Update Employee</span>
+        <div class="col-md-4 mt-2 d-flex justify-content-between" style="background:  #5B77CD;">
+            <span class="fw-bold mx-3 fs-5 p-1 text-white">Update Employee</span>
             <a asp-area="" asp-controller="Employee" asp-action="Employees">
-                <ion-icon name="arrow-back-outline" class="fs-4 p-2 text-dark"></ion-icon>
+                <i class="fa-solid fa-arrow-left fs-6 p-2 text-white"></i>
             </a>
         </div>
         <form method="post" action="UpdateEmployee" enctype="multipart/form-data">
@@ -42,10 +42,10 @@
                     @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Email", type = "email", @readonly = "readonly" })
                     @Html.LabelFor(x => x.Email)
                 </div>
-                <div class="form-floating mb-2">
+              @*   <div class="form-floating mb-2">
                     @Html.TextBoxFor(x => x.Department, new { @class = "form-control", placeholder = "Department" })
                     @Html.LabelFor(x => x.Department)
-                </div>
+                </div> *@
                 <div class="form-floating mb-2">
                     <input type="file" class="form-control" asp-for="Image" placeholder="Upload Files"/>
                 </div>
