@@ -20,7 +20,7 @@ namespace EmployeeMgmtSystem.Models.Domain
 
         [Required]
         public int DepartmentId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
        
     }
