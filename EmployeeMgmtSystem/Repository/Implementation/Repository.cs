@@ -37,6 +37,17 @@ namespace EmployeeMgmtSystem.Repository.Implementation
             return query.ToList();
         }
 
+        public IEnumerable<T> GetAllData(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = database;
+            foreach(var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToList();
+        }
+
         public void Remove(T entity)
         {
             database.Remove(entity);
