@@ -3,6 +3,8 @@ using EmployeeMgmtSystem.Models.Domain;
 using EmployeeMgmtSystem.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeMgmtSystem.Controllers
 {
@@ -11,9 +13,11 @@ namespace EmployeeMgmtSystem.Controllers
     {
         private readonly ILogger<EmployeeController> _logger;
         private readonly IEmployeeRepository _employeeRepo;
-        public EmployeeController(IEmployeeRepository employeeRepo,ILogger<EmployeeController> logger) {
+        private readonly IDepartmentRepository _departmentRepo;
+        public EmployeeController(IEmployeeRepository employeeRepo,IDepartmentRepository departmentRepo, ILogger<EmployeeController> logger) {
             _employeeRepo = employeeRepo;
             _logger = logger;
+            _departmentRepo = departmentRepo;
         }
 
         public IActionResult Index()
@@ -35,7 +39,12 @@ namespace EmployeeMgmtSystem.Controllers
         }
         public IActionResult AddEmployee()
         {
-            return View();
+            List<Department> departments = _departmentRepo.GetAll().ToList();
+            EmployeeViewModel employeeVm = new EmployeeViewModel()
+            {
+                Departments = departments
+            };
+            return View(employeeVm);
         }
         [HttpPost]
         public IActionResult AddEmployee(EmployeeViewModel employeeVm)
@@ -55,7 +64,7 @@ namespace EmployeeMgmtSystem.Controllers
                     Phone = employeeVm.Phone,
                     Position = employeeVm.Position,
                     Email = employeeVm.Email,
-                    Department = employeeVm.Department,
+                    //DepartmentName = employeeVm.Department,
                     Image = filename
                 };
                 _employeeRepo.Add(employee);
@@ -73,6 +82,7 @@ namespace EmployeeMgmtSystem.Controllers
         public IActionResult UpdateEmployee(int id)
         {
             var employee = _employeeRepo.Get(x => x.Id == id);
+            var departments = _departmentRepo.GetAll().ToList();
             if (employee != null)
             {
                 var employeeData = new UpdateEmployeeViewModel()
@@ -84,7 +94,7 @@ namespace EmployeeMgmtSystem.Controllers
                     Phone = employee.Phone,
                     Position = employee.Position,
                     Email = employee.Email,
-                    Department = employee.Department,
+                    DepartNames = departments,
                 };
                 return View(employeeData);
             }
@@ -112,7 +122,7 @@ namespace EmployeeMgmtSystem.Controllers
                         employee.Address = updateVM.Address;
                         employee.Salary = updateVM.Salary;
                         employee.Phone = updateVM.Phone;
-                        employee.Department = updateVM.Department;
+                        //employee.DepartmentName = updateVM.Department;
                         employee.Email = updateVM.Email;
                         _employeeRepo.Update(employee);
                         _employeeRepo.Save();
