@@ -11,7 +11,7 @@ namespace EmployeeMgmtSystem.Models
         public string? Position { get; set; }
         public string? Email { get; set; }
         public List<Department>? Departments { get; set; }
-        public int? SelectedDepartmentId { get; set; }
+        public int SelectedDepartmentId { get; set; }
 
         public IFormFile? Image { get; set; }
     }
