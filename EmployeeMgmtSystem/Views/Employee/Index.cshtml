@@ -9,10 +9,22 @@
     <h5>
         Dashboard
     </h5>
-    <div class="card" style="width: 18rem;">
-        <ul class="list-group list-group-flush bg-danger">
-            <li class="list-group-item">@empCount</li>
-            <li class="list-group-item">A second item</li>
-        </ul>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fw-bold">@ViewBag.EmployeeCount</li>
+                    <li class="list-group-item">Employees</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fw-bold">4</li>
+                    <li class="list-group-item">Departments</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
