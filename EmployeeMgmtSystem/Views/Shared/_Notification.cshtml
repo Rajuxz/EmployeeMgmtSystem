@@ -13,5 +13,11 @@ else if (TempData["ErrorMessage"] != null)
     <script type="text/javascript">
         toastr.error('@TempData["ErrorMessage"]')
     </script>
-
+}else if(TempData["WarningMessage"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.warning('@TempData["WarningMessage"]')
+    </script>   
 }

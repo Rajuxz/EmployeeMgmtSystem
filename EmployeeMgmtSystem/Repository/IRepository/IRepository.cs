@@ -7,6 +7,8 @@ namespace EmployeeMgmtSystem.Repository.IRepository
     {
         void Add(T entity);
         IEnumerable<T> GetAll();
+
+        IEnumerable<T> GetAllData(params Expression<Func<T, object>>[] includes);
         T Get(Expression<Func<T, bool>> filter);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);

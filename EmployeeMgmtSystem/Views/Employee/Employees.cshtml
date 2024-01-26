@@ -31,8 +31,9 @@
                             <th scope="col">Position</th>
                             <th scope="col">Email</th>
                             <th scope="col">Department</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th colspan ="3" scope="col"> Action</th>
+                            <th class="d-none" scope="col"></th>
+                            <th class="d-none" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,18 +68,24 @@
                 { "data": "phone",orderable:false },
                 { "data": "position" },
                 { "data": "email" },
-                { "data": "department" },
+                { "data": "department.name" },
                 {
-                    data: null,
-                    className: "dt-editor delete",
-                    defaultContent: '<i class="fa-solid fa-trash fs-6 text-danger"></i>',
-                    orderable: false
-                }, {
                     data: null,
                     className: "dt-editor editor-edit",
                     defaultContent: '<i class="fa-solid fa-pen fs-6 dt-editor editor-edit" style="cursor: pointer;"></i>',
                     orderable: false
                 },
+                {
+                    data:null,
+                    className : "dt-editor editor-view",
+                        defaultContent: '<i class="fa-regular fa-eye text-success fs-6 dt-editor editor-view" style="cursor:pointer;"></i>'
+                },
+                {
+                    data: null,
+                    className: "dt-editor delete",
+                    defaultContent: '<i class="fa-solid fa-trash fs-6 text-danger" style="cursor:pointer;"></i>',
+                    orderable: false
+                }
             ],
         //table edit
             "createdRow" : function (row, data, dataIndex) {
@@ -99,6 +106,10 @@
                     var id = $(row).data("id");
                     // Redirect to the edit page with the corresponding ID
                     window.location.href = "/Employee/UpdateEmployee/" + id;
+                });
+                $(".editor-view", row).on('click', function () {
+                    var id = $(row).data('id')
+                    window.location.href = '/Employee/ViewEmployee/' + id;
                 });
             }
         });

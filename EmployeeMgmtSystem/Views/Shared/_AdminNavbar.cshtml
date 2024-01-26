@@ -24,14 +24,27 @@
         </span>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">View</a></li>
-            <li><a class="dropdown-item" href="Department/AddDepartment">Add Data</a></li>
+            <li><a class="dropdown-item" href="/Department/AddDepartment">Add Data</a></li>
         </ul>
     </div>
 
-    <div class="mx-4 d-none d-sm-block border-end">
-        <a asp-area="" asp-controller="Employee" asp-action="Employees" class="d-none d-sm-block text-secondary" style="text-decoration:none;">
+    @* <div class="mx-4 d-none d-sm-block border-end">
             Employees
         </a>
+    </div> *@
+
+    <div class="dropdown d-none d-sm-block border-end mx-3">
+        <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+        </span>
+        <ul class="dropdown-menu">
+            
+            <li>
+            <a asp-area="" asp-controller="Employee" asp-action="Employees" class="dropdown-item text-secondary" style="text-decoration:none;">Employees</a>
+            </li>
+            
+            <li><a class="dropdown-item" asp-controller="Employee" asp-action="EmployeeSheet">Employee Sheet</a></li>
+        </ul>
     </div>
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

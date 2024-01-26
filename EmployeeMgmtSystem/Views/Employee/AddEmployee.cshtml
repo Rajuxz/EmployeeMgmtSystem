@@ -4,56 +4,73 @@
 }
 @using EmployeeMgmtSystem.Models.Domain
 @model EmployeeMgmtSystem.Models.EmployeeViewModel
+<partial name="/Views/Shared/_Notification.cshtml"/>
 
-<div class="container">
-<div class="d-flex flex-column">
-        <div class="col-md-4 mt-2 d-flex justify-content-between" style="background:  #5B77CD;">
-        <span class="fw-bold mx-3 fs-5 p-1 text-light">Add Employee</span>
-        <a asp-area="" asp-controller="Employee" asp-action = "Employees">
-            <i class=" fa-solid fa-arrow-left fs-6 p-2 text-white"></i>
-        </a>
-    </div>
-    <form method="post" action="AddEmployee" enctype="multipart/form-data">
-    <div class="col-md-4 mt-2">
-        <div class="form-floating mb-3">
-            @Html.TextBoxFor(x=>x.Name,new{@class = "form-control",placeholder="Employee Name",required="required"})
-            @Html.LabelFor(x=>x.Name)
-        </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Address,new{@class = "form-control",placeholder="Address",required="required"})
-            @Html.LabelFor(x=>x.Address)
-        </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Salary,new{@class = "form-control",placeholder="Salary",required="required"})
-            @Html.LabelFor(x=>x.Salary)
-        </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Phone,new{@class = "form-control",placeholder="Contact Number",required="required"})
-            @Html.LabelFor(x=>x.Phone)
-        </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Position,new{@class = "form-control",placeholder="eg. Manager",required="required"})
-            @Html.LabelFor(x=>x.Position)
-        </div>
-        <div class="form-floating mb-2">
-            @Html.TextBoxFor(x=>x.Email,new{@class = "form-control",placeholder="Email", type="email",required="required"})
-            @Html.LabelFor(x=>x.Email)
-        </div>
-        <div class="form-group">
-        <label>Department</label>
-        <select asp-for="SelectedDepartmentId" asp-items="new SelectList(Model.Departments,nameof(Department.Id),nameof(Department.Name))" class="form-control">
-            <option>Select Department</option>
-        </select>
-    </div>
-        <div class="form-floating mb-2">
-            <input type="file" class="form-control" placeholder="Image" asp-for="Image" required/>
-            @Html.LabelFor(x=>x.Image)
-        </div>
-        <div class="form-control">
-            <input type="submit" class="btn btn-primary" value="Add Employee">
+
+<div class="container text-start">
+    <div class="d-flex flex-column mb-3">
+        <div class="col-md-10 mt-2 d-flex justify-content-between" style="background:  #5B77CD;">
+            <span class="fw-bold mx-2 fs-5 p-1 text-light">Add Employee</span>
+            <a asp-area="" asp-controller="Employee" asp-action="Employees">
+                <i class=" fa-solid fa-arrow-left fs-6 p-2 text-white"></i>
+            </a>
         </div>
     </div>
+    <div class="col-md-10">
+    <form class="row row-cols-2" method="post" action="AddEmployee" enctype="multipart/form-data">
+        <div class="col">
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Employee Name", required = "required" })
+                @Html.LabelFor(x => x.Name)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                @Html.TextBoxFor(x => x.Address, new { @class = "form-control", placeholder = "Address", required = "required" })
+                @Html.LabelFor(x => x.Address)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                @Html.TextBoxFor(x => x.Salary, new { @class = "form-control", placeholder = "Salary", required = "required" })
+                @Html.LabelFor(x => x.Salary)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                @Html.TextBoxFor(x => x.Phone, new { @class = "form-control", placeholder = "Contact Number", required = "required" })
+                @Html.LabelFor(x => x.Phone)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                @Html.TextBoxFor(x => x.Position, new { @class = "form-control", placeholder = "eg. Manager", required = "required" })
+                @Html.LabelFor(x => x.Position)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
+                @Html.LabelFor(x => x.Email)
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Department</label>
+                <select asp-for="SelectedDepartmentId" asp-items="new SelectList(Model.Departments,nameof(Department.Id),nameof(Department.Name))" class="form-control">
+                    <option>Select Department</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-2">
+                <input type="file" class="form-control" placeholder="Image" asp-for="Image" required />
+                @Html.LabelFor(x => x.Image)
+            </div>
+        </div>
+        <div class="col">
+                <input type="submit" class="btn btn-primary" value="Add Employee">
+        </div>
     </form>
+    </div>
 </div>
-</div>
-
