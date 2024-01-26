@@ -1,19 +1,20 @@
 ﻿@{
     ViewData["Title"] = "View Employees";
+    Layout = "_AdminLayout";
 }
 
 <partial name="~/Views/Shared/_Notification.cshtml" />
 
 <div class="container">
     <div class="d-flex flex-column">
-        <div class="col-md-10 mb-3">
-            <div  style="background: #43aa8b;">
+        <div class="col-md-11 mb-3">
+            <div  style="background: #5B77CD;">
                 <span class="d-flex justify-content-between p-2">
-                    <a class="text-white mx-2 fw-bold" aria-current="page" asp-area="" asp-controller="Employee" asp-action="Employees" style="text-decoration:none;">Dashboard</a>
+                    <a class="text-white mx-2 fw-bold" aria-current="page" asp-area="" asp-controller="Employee" asp-action="Employees" style="text-decoration:none;">Employee Data</a>
                     <a asp-area="" asp-controller="Employee" asp-action="AddEmployee" data-bs-toggle="tooltip" data-bs-placement="top"
                        data-bs-custom-class="custom-tooltip"
                        data-bs-title="Add Data">
-                        <ion-icon name="person-add-outline" class="fs-4 text-white mx-3 pe-auto"></ion-icon>
+                        <i class="fa-solid fa-user-plus fs-5 text-white mx-3 pe-auto"></i>
                     </a>
                 </span>
             </div>
@@ -70,12 +71,12 @@
                 {
                     data: null,
                     className: "dt-editor delete",
-                    defaultContent: '<ion-icon name="trash-outline" class="fs-5 text-danger"></ion-icon>',
+                    defaultContent: '<i class="fa-solid fa-trash fs-6 text-danger"></i>',
                     orderable: false
                 }, {
                     data: null,
                     className: "dt-editor editor-edit",
-                    defaultContent: '<ion-icon name="create-outline" class="fs-5 dt-editor editor-edit cursor-pointer"></ion-icon>',
+                    defaultContent: '<i class="fa-solid fa-pen fs-6 dt-editor editor-edit" style="cursor: pointer;"></i>',
                     orderable: false
                 },
             ],
