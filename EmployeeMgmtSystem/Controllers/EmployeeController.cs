@@ -29,7 +29,7 @@ namespace EmployeeMgmtSystem.Controllers
         }
         public IActionResult GetData()
         {
-            List<EmployeeModel> employees = _employeeRepo.GetAll().ToList();
+            List<EmployeeModel> employees = _employeeRepo.GetAllData(e=>e.Department).ToList();
             return Json(employees);
         }
         public IActionResult Employees()
@@ -56,33 +56,46 @@ namespace EmployeeMgmtSystem.Controllers
                 { 
                    filename = _employeeRepo.SaveFileAndReturnName("images", employeeVm.Image);
                 }
-                var employee = new EmployeeModel()
+                //Check if email and phone is already in use or not.
+               if(_employeeRepo.Get(x=>x.Email == employeeVm.Email || x.Phone == employeeVm.Phone) != null)
+               {
+                    TempData["ErrorMessage"] = "Email or phone is already in use";
+                    //⚠️ If this block is executed, and you're returning view
+                    // Department select list will be empty so it will throw exception.
+                    //Always use Name of Action.
+                    return RedirectToAction("AddEmployee");
+               }
+
+               //if not...
+                else
                 {
-                    Name = employeeVm.Name,
-                    Address = employeeVm.Address,
-                    Salary = employeeVm.Salary,
-                    Phone = employeeVm.Phone,
-                    Position = employeeVm.Position,
-                    Email = employeeVm.Email,
-                    //DepartmentName = employeeVm.Department,
-                    Image = filename
-                };
-                _employeeRepo.Add(employee);
-                _employeeRepo.Save();
-                SetMessage("Data Inserted Successfully !", "SuccessMessage");
-                return RedirectToAction("Employees");
+                    var employee = new EmployeeModel()
+                    {
+                        Name = employeeVm.Name,
+                        Address = employeeVm.Address,
+                        Salary = employeeVm.Salary,
+                        Phone = employeeVm.Phone,
+                        Position = employeeVm.Position,
+                        Email = employeeVm.Email,
+                        Image = filename,
+                        DepartmentId = employeeVm.SelectedDepartmentId
+                    };
+                    _employeeRepo.Add(employee);
+                    _employeeRepo.Save();
+                    SetMessage("Data Inserted Successfully !", "SuccessMessage");
+                    return RedirectToAction("Employees");
+                }
 
             }catch(Exception e)
             {
                 SetMessage($"Opps !! Cannot Add Data. {e.Message}", "ErrorMessage");
                 return RedirectToAction("Employees");
-            }
-            
+            }   
         }
         public IActionResult UpdateEmployee(int id)
         {
             var employee = _employeeRepo.Get(x => x.Id == id);
-            var departments = _departmentRepo.GetAll().ToList();
+            //var departments = _departmentRepo.GetAll().ToList();
             if (employee != null)
             {
                 var employeeData = new UpdateEmployeeViewModel()
@@ -94,7 +107,6 @@ namespace EmployeeMgmtSystem.Controllers
                     Phone = employee.Phone,
                     Position = employee.Position,
                     Email = employee.Email,
-                    DepartNames = departments,
                 };
                 return View(employeeData);
             }
@@ -122,7 +134,6 @@ namespace EmployeeMgmtSystem.Controllers
                         employee.Address = updateVM.Address;
                         employee.Salary = updateVM.Salary;
                         employee.Phone = updateVM.Phone;
-                        //employee.DepartmentName = updateVM.Department;
                         employee.Email = updateVM.Email;
                         _employeeRepo.Update(employee);
                         _employeeRepo.Save();
@@ -157,6 +168,20 @@ namespace EmployeeMgmtSystem.Controllers
         {
             var employee = _employeeRepo.Get(emp => emp.Id == id);
             return View(employee);
+        }
+
+        public IActionResult EmployeeSheet(int id)
+        {
+            try
+            {
+                var employees = _employeeRepo.FindById(id);
+                return View(employees);
+                                
+            }catch(Exception ex)
+            {
+                TempData["WarningMessage"] = $"There is a problem, Please fix it first : {ex.Message}";
+                return RedirectToAction("Employees");
+            }
         }
 
         public void SetMessage(string message, string messageType)
