@@ -1,4 +1,6 @@
-﻿namespace EmployeeMgmtSystem.Models
+﻿using EmployeeMgmtSystem.Models.Domain;
+
+namespace EmployeeMgmtSystem.Models
 {
     public class UpdateEmployeeViewModel
     {
@@ -9,7 +11,9 @@
         public string? Phone { get; set; }
         public string? Position { get; set; }
         public string? Email { get; set; }
-        public string? Department { get; set; }
+        //public string? Department { get; set; }
+
+        public List<Department> DepartNames { get; set; }
         public IFormFile? Image { get; set; }
     }
 }
